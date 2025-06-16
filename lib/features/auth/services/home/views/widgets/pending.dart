@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:todoapp/core/models/todo_model.dart';
-import 'package:todoapp/features/auth/data/services/database_service.dart';
+import 'package:todoapp/features/auth/services/database_service.dart';
 
 class Pending extends StatefulWidget {
   const Pending({super.key});

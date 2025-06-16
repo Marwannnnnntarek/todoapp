@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:todoapp/core/helpers/app_routes.dart';
-import 'package:todoapp/features/auth/data/services/auth_service.dart';
+import 'package:todoapp/features/auth/services/auth_service.dart';
 
 class SigninView extends StatelessWidget {
   SigninView({super.key});

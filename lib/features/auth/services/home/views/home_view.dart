@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:todoapp/core/helpers/app_routes.dart';
 import 'package:todoapp/core/models/todo_model.dart';
-import 'package:todoapp/features/auth/data/services/auth_service.dart';
-import 'package:todoapp/features/auth/data/services/database_service.dart';
-import 'package:todoapp/features/home/views/widgets/completed.dart';
-import 'package:todoapp/features/home/views/widgets/pending.dart';
+import 'package:todoapp/features/auth/services/auth_service.dart';
+import 'package:todoapp/features/auth/services/database_service.dart';
+import 'package:todoapp/features/auth/services/home/views/widgets/completed.dart';
+import 'package:todoapp/features/auth/services/home/views/widgets/pending.dart';
+import 'package:todoapp/features/auth/services/home/views/widgets/tab_button.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -46,7 +47,7 @@ class _HomeViewState extends State<HomeView> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: List.generate(buttonLabels.length, (index) {
               final isSelected = _buttonIndex == index;
-              return _TabButton(
+              return TabButton(
                 label: buttonLabels[index],
                 isSelected: isSelected,
                 onTap: () {
@@ -93,7 +94,7 @@ class _HomeViewState extends State<HomeView> {
             style: const TextStyle(color: Colors.black),
           ),
           content: SingleChildScrollView(
-            child: Container(
+            child: SizedBox(
               width: MediaQuery.of(context).size.width,
               child: Column(
                 children: [
@@ -148,44 +149,6 @@ class _HomeViewState extends State<HomeView> {
           ],
         );
       },
-    );
-  }
-}
-
-class _TabButton extends StatelessWidget {
-  final String label;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  const _TabButton({
-    required this.label,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      borderRadius: BorderRadius.circular(10),
-      onTap: onTap,
-      child: Container(
-        height: 50,
-        width: MediaQuery.of(context).size.width / 2.4,
-        decoration: BoxDecoration(
-          color: isSelected ? Colors.indigo : Colors.white,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Center(
-          child: Text(
-            label,
-            style: TextStyle(
-              fontSize: isSelected ? 16 : 14,
-              fontWeight: FontWeight.w500,
-              color: isSelected ? Colors.white : Colors.black,
-            ),
-          ),
-        ),
-      ),
     );
   }
 }
