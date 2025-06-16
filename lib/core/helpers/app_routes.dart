@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:go_router/go_router.dart';
 import 'package:todoapp/features/auth/views/signin_view.dart';
 import 'package:todoapp/features/auth/views/signup_view.dart';
-import 'package:todoapp/features/auth/services/home/views/home_view.dart';
+import 'package:todoapp/features/home/views/home_view.dart';
 
 class AppRoutes {
   static const String signup = '/SignupView';

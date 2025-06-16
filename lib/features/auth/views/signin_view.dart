@@ -58,6 +58,7 @@ class SigninView extends StatelessWidget {
             ),
             SizedBox(height: 16),
             TextField(
+              obscureText: true,
               controller: passwordController,
               style: TextStyle(color: Colors.white),
               decoration: InputDecoration(
