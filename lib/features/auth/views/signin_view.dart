@@ -3,6 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:todoapp/core/helpers/app_routes.dart';
 import 'package:todoapp/features/auth/services/auth_service.dart';
+import 'package:todoapp/features/auth/views/widgets/email_field.dart';
+import 'package:todoapp/features/auth/views/widgets/password_field.dart';
+import 'package:todoapp/features/auth/views/widgets/register_and_signin_button.dart';
+import 'package:todoapp/features/auth/views/widgets/header.dart';
+import 'package:todoapp/features/auth/views/widgets/signup_prompt.dart';
 
 class SigninView extends StatefulWidget {
   const SigninView({super.key});
@@ -64,71 +69,26 @@ class _SigninViewState extends State<SigninView> {
           child: Column(
             children: [
               const SizedBox(height: 50),
-              const Text(
-                'Welcome Back',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 35,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              const Text(
-                'Sign in to continue',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                ),
+              const Header(
+                title: 'Welcome Back',
+                subTitle: 'Sign in to continue',
               ),
               const SizedBox(height: 35),
-              TextFormField(
+              EmailField(
                 controller: emailController,
-                style: const TextStyle(color: Colors.white),
                 validator: _validateEmail,
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
-                  labelText: 'Email',
-                  labelStyle: const TextStyle(color: Colors.white),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: const BorderSide(color: Colors.white),
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
               ),
               const SizedBox(height: 16),
-              TextFormField(
+              PasswordField(
                 controller: passwordController,
-                obscureText: true,
-                style: const TextStyle(color: Colors.white),
                 validator: _validatePassword,
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                  labelStyle: const TextStyle(color: Colors.white),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: const BorderSide(color: Colors.white),
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
               ),
               const SizedBox(height: 50),
-              SizedBox(
-                height: 50,
-                width: MediaQuery.of(context).size.width / 1.5,
-                child: ElevatedButton(
-                  onPressed: _handleSignIn,
-                  child: const Text('Sign In'),
-                ),
+              RegisterAndSigninButton(
+                onPressed: _handleSignIn,
+                buttonText: 'Sign In',
               ),
-              TextButton(
-                onPressed: () => context.push(AppRoutes.signup),
-                child: const Text("Don't have an account? Sign up"),
-              ),
+              SignUpPrompt(),
             ],
           ),
         ),
