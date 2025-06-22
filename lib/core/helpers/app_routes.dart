@@ -6,13 +6,13 @@ import 'package:todoapp/features/auth/views/verify_view.dart';
 import 'package:todoapp/features/home/views/home_view.dart';
 
 class AppRoutes {
-  static const String verify = '/EmailVerificationScreen';
+  static const String verify = '/EmailVerificationView';
   static const String signup = '/SignupView';
   static const String signin = '/SigninView';
   static const String home = '/HomeView';
 
   static final GoRouter router = GoRouter(
-    initialLocation: '/', // Root acts as the entry point
+    initialLocation: '/',
     // 🔁 Redirect logic based on auth state
     redirect: (context, state) {
       final isLoggedIn = FirebaseAuth.instance.currentUser != null;
@@ -42,7 +42,7 @@ class AppRoutes {
       ),
       GoRoute(
         path: verify,
-        builder: (context, state) => EmailVerificationScreen(),
+        builder: (context, state) => EmailVerificationView(),
       ),
       GoRoute(path: signup, builder: (context, state) => SignupView()),
       GoRoute(path: signin, builder: (context, state) => SigninView()),
