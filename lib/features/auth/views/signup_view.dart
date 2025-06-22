@@ -47,7 +47,7 @@ class _SignupViewState extends State<SignupView> {
         );
 
         if (user != null) {
-          context.go(AppRoutes.home); // 🔁 Redirect to VerifyView
+          context.go(AppRoutes.verify); // 🔁 Redirect to VerifyView
         } else {
           ScaffoldMessenger.of(
             context,
