@@ -22,6 +22,8 @@ class _SigninViewState extends State<SigninView> {
   final TextEditingController passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  bool _isLoading = false;
+
   String? _validateEmail(String? value) {
     if (value == null || value.isEmpty) return 'Email is required';
     final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
@@ -37,18 +39,32 @@ class _SigninViewState extends State<SigninView> {
 
   Future<void> _handleSignIn() async {
     if (_formKey.currentState!.validate()) {
-      User? user = await _authService.signIn(
-        emailController.text.trim(),
-        passwordController.text.trim(),
-      );
-      if (user != null) {
-        context.go(AppRoutes.home);
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Login failed. Check your credentials.'),
-          ),
+      setState(() => _isLoading = true);
+      try {
+        User? user = await _authService.signIn(
+          emailController.text.trim(),
+          passwordController.text.trim(),
         );
+
+        if (user != null) {
+          context.go(AppRoutes.home);
+        } else if (user != null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Login failed. Check your credentials.'),
+            ),
+          );
+        }
+      } on FirebaseAuthException catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(e.message ?? 'Authentication error')),
+        );
+      } catch (e) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('An error occurred: $e')));
+      } finally {
+        setState(() => _isLoading = false);
       }
     }
   }
@@ -84,10 +100,12 @@ class _SigninViewState extends State<SigninView> {
                 validator: _validatePassword,
               ),
               const SizedBox(height: 50),
-              RegisterAndSigninButton(
-                onPressed: _handleSignIn,
-                buttonText: 'Sign In',
-              ),
+              _isLoading
+                  ? const CircularProgressIndicator()
+                  : RegisterAndSigninButton(
+                    onPressed: _handleSignIn,
+                    buttonText: 'Sign In',
+                  ),
               SignUpPrompt(),
             ],
           ),

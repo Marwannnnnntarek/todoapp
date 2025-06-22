@@ -22,6 +22,8 @@ class _SignupViewState extends State<SignupView> {
   final TextEditingController passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  bool _isLoading = false;
+
   String? _validateEmail(String? value) {
     if (value == null || value.isEmpty) return 'Email is required';
     final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
@@ -37,16 +39,30 @@ class _SignupViewState extends State<SignupView> {
 
   Future<void> _handleSignUp() async {
     if (_formKey.currentState!.validate()) {
-      User? user = await _authService.signUp(
-        emailController.text.trim(),
-        passwordController.text.trim(),
-      );
-      if (user != null) {
-        context.go(AppRoutes.home);
-      } else {
+      setState(() => _isLoading = true);
+      try {
+        User? user = await _authService.signUp(
+          emailController.text.trim(),
+          passwordController.text.trim(),
+        );
+
+        if (user != null) {
+          context.go(AppRoutes.home); // 🔁 Redirect to VerifyView
+        } else {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(const SnackBar(content: Text('Registration failed')));
+        }
+      } on FirebaseAuthException catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(e.message ?? 'Authentication error')),
+        );
+      } catch (e) {
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(const SnackBar(content: Text('Registration failed')));
+        ).showSnackBar(SnackBar(content: Text('An error occurred: $e')));
+      } finally {
+        setState(() => _isLoading = false);
       }
     }
   }
@@ -79,10 +95,12 @@ class _SignupViewState extends State<SignupView> {
                 validator: _validatePassword,
               ),
               const SizedBox(height: 50),
-              RegisterAndSigninButton(
-                onPressed: _handleSignUp,
-                buttonText: 'Register',
-              ),
+              _isLoading
+                  ? const CircularProgressIndicator()
+                  : RegisterAndSigninButton(
+                    onPressed: _handleSignUp,
+                    buttonText: 'Register',
+                  ),
               const SignInPrompt(),
             ],
           ),
