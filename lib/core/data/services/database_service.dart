@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:todoapp/core/models/todo_model.dart';
+import 'package:todoapp/core/data/models/todo_model.dart';
 
 class DatabaseService {
   final CollectionReference todoCollection = FirebaseFirestore.instance
@@ -55,13 +55,7 @@ class DatabaseService {
 
   List<TodoModel> _todoListFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) {
-      return TodoModel(
-        id: doc.id,
-        title: doc['title'] ?? '',
-        description: doc['description'] ?? '',
-        completed: doc['completed'] ?? false,
-        timestamp: doc['timestamp'] ?? Timestamp.now(),
-      );
+      return TodoModel.fromJson(doc.data() as Map<String, dynamic>, doc.id);
     }).toList();
   }
 }

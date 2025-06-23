@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
-class RegisterAndSigninButton extends StatelessWidget {
+class Button extends StatelessWidget {
   final VoidCallback onPressed;
   final String buttonText;
 
-  const RegisterAndSigninButton({
-    required this.onPressed,
-    required this.buttonText,
-  });
+  const Button({super.key, required this.onPressed, required this.buttonText});
 
   @override
   Widget build(BuildContext context) {

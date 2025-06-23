@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:todoapp/core/helpers/app_routes.dart';
 
 class EmailVerificationView extends StatefulWidget {
-  const EmailVerificationView({Key? key}) : super(key: key);
+  const EmailVerificationView({super.key});
 
   @override
   State<EmailVerificationView> createState() => _EmailVerificationViewState();

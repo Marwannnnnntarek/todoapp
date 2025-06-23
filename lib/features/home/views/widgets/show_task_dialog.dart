@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:todoapp/core/models/todo_model.dart';
-import 'package:todoapp/features/auth/services/database_service.dart';
+import 'package:todoapp/core/data/models/todo_model.dart';
+import 'package:todoapp/core/data/services/database_service.dart';
 
 class ShowTaskDialog extends StatefulWidget {
   final TodoModel? todoModel;

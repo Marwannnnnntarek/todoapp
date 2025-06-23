@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:go_router/go_router.dart';
-import 'package:todoapp/features/auth/views/signin_view.dart';
-import 'package:todoapp/features/auth/views/signup_view.dart';
-import 'package:todoapp/features/auth/views/verify_view.dart';
+import 'package:todoapp/features/signin/views/signin_view.dart';
+import 'package:todoapp/features/signup/views/signup_view.dart';
+import 'package:todoapp/features/verify/views/verify_view.dart';
 import 'package:todoapp/features/home/views/home_view.dart';
 
 class AppRoutes {
