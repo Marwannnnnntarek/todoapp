@@ -7,28 +7,28 @@ class DatabaseService {
       .collection('todos');
   User? user = FirebaseAuth.instance.currentUser!;
   //add task
-  Future<DocumentReference> addTask(String title, String description) async {
-    return await todoCollection.add({
-      'uid': user!.uid,
-      'title': title,
-      'description': description,
-      'completed': false,
-      'timestamp': FieldValue.serverTimestamp(),
-    });
-  }
+  // Future<DocumentReference> addTask(String title, String description) async {
+  //   return await todoCollection.add({
+  //     'uid': user!.uid,
+  //     'title': title,
+  //     'description': description,
+  //     'completed': false,
+  //     'timestamp': FieldValue.serverTimestamp(),
+  //   });
+  // }
 
-  //update task
-  Future<void> updateTask(String id, String title, String description) async {
-    return await todoCollection.doc(id).update({
-      'title': title,
-      'description': description,
-    });
-  }
+  // //update task
+  // Future<void> updateTask(String id, String title, String description) async {
+  //   return await todoCollection.doc(id).update({
+  //     'title': title,
+  //     'description': description,
+  //   });
+  // }
 
-  //update task status
-  Future<void> updateTaskStatus(String id, bool completed) async {
-    return await todoCollection.doc(id).update({'completed': completed});
-  }
+  // //update task status
+  // Future<void> updateTaskStatus(String id, bool completed) async {
+  //   return await todoCollection.doc(id).update({'completed': completed});
+  // }
 
   //delete task
   Future<void> deleteTask(String id) async {

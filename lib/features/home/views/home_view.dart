@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:todoapp/features/home/views/widgets/completed.dart';
-import 'package:todoapp/features/home/views/widgets/pending.dart';
+import 'package:todoapp/features/home/views/completed_view.dart';
+import 'package:todoapp/features/home/views/pending_view.dart';
 import 'package:todoapp/features/home/views/widgets/show_task_dialog.dart';
 import 'package:todoapp/features/home/views/widgets/signout_button.dart';
 import 'package:todoapp/features/home/views/widgets/tab_switcher.dart';
@@ -16,7 +16,7 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   int _buttonIndex = 0;
   final List<String> _buttonLabels = ['Pending', 'Completed'];
-  final List<Widget> _views = [const Pending(), const Completed()];
+  final List<Widget> _views = [const PendingView(), const CompletedView()];
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +51,7 @@ class _HomeViewState extends State<HomeView> {
               builder: (context) => const ShowTaskDialog(),
             ),
         backgroundColor: Colors.indigo,
-        child: const Icon(Icons.add),
+        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }

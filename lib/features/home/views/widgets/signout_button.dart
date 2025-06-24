@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:todoapp/core/helpers/app_routes.dart';
-import 'package:todoapp/core/data/cubits/signout/signout_cubit.dart';
+import 'package:todoapp/core/data/cubits/auth/signout/signout_cubit.dart';
 
 class SignOutButton extends StatelessWidget {
   const SignOutButton({super.key});
