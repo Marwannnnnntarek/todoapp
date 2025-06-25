@@ -1,57 +1,51 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todoapp/core/data/cubits/tab_switch/cubit/tab_switch_cubit.dart';
 import 'package:todoapp/features/home/views/completed_view.dart';
 import 'package:todoapp/features/home/views/pending_view.dart';
-import 'package:todoapp/features/home/views/widgets/show_task_dialog.dart';
-import 'package:todoapp/features/home/views/widgets/signout_button.dart';
+import 'package:todoapp/features/home/views/widgets/home_app_bar.dart';
 import 'package:todoapp/features/home/views/widgets/tab_switcher.dart';
 import 'package:todoapp/features/home/views/widgets/task_tabs_view.dart';
+import 'package:todoapp/features/home/views/widgets/add_task_button.dart';
 
-class HomeView extends StatefulWidget {
+class HomeView extends StatelessWidget {
   const HomeView({super.key});
 
-  @override
-  State<HomeView> createState() => _HomeViewState();
-}
-
-class _HomeViewState extends State<HomeView> {
-  int _buttonIndex = 0;
-  final List<String> _buttonLabels = ['Pending', 'Completed'];
-  final List<Widget> _views = [const PendingView(), const CompletedView()];
+  final List<String> _labels = const ['Pending', 'Completed'];
+  final List<Widget> _views = const [PendingView(), CompletedView()];
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xff1d2630),
-      appBar: AppBar(
+    return BlocProvider(
+      create: (context) => TabSwitchCubit(),
+      child: Scaffold(
         backgroundColor: const Color(0xff1d2630),
-        foregroundColor: Colors.white,
-        title: const Text('Todo App'),
-        actions: const [SignOutButton()],
-      ),
-      body: Column(
-        children: [
-          const SizedBox(height: 20),
-          TabSwitcher(
-            selectedIndex: _buttonIndex,
-            labels: _buttonLabels,
-            onTabSelected: (index) {
-              setState(() {
-                _buttonIndex = index;
-              });
-            },
-          ),
-          const SizedBox(height: 20),
-          TaskTabsView(selectedIndex: _buttonIndex, views: _views),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed:
-            () => showDialog(
-              context: context,
-              builder: (context) => const ShowTaskDialog(),
+        appBar: const HomeAppBar(),
+        body: Column(
+          children: [
+            const SizedBox(height: 20),
+            Expanded(
+              child: BlocBuilder<TabSwitchCubit, int>(
+                builder: (context, tabIndex) {
+                  return Column(
+                    children: [
+                      TabSwitcher(
+                        selectedIndex: tabIndex,
+                        labels: _labels,
+                        onTabSelected:
+                            (index) =>
+                                context.read<TabSwitchCubit>().switchTab(index),
+                      ),
+                      const SizedBox(height: 20),
+                      TaskTabsView(selectedIndex: tabIndex, views: _views),
+                    ],
+                  );
+                },
+              ),
             ),
-        backgroundColor: Colors.indigo,
-        child: const Icon(Icons.add, color: Colors.white),
+          ],
+        ),
+        floatingActionButton: const AddTaskButton(),
       ),
     );
   }

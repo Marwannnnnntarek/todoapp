@@ -24,14 +24,4 @@ class TodoModel {
       timestamp: json['timestamp'] ?? Timestamp.now(),
     );
   }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'title': title,
-      'description': description,
-      'completed': completed,
-      'timestamp': timestamp,
-    };
-  }
 }

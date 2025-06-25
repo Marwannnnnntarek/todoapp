@@ -14,90 +14,96 @@ class EmailVerificationView extends StatefulWidget {
 class _EmailVerificationViewState extends State<EmailVerificationView> {
   bool isEmailVerified = false;
   Timer? timer;
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    FirebaseAuth.instance.currentUser?.sendEmailVerification();
+    _sendVerificationEmail();
     timer = Timer.periodic(
       const Duration(seconds: 3),
-      (_) => checkEmailVerified(),
+      (_) => _checkEmailVerified(),
     );
   }
 
-  checkEmailVerified() async {
+  void _sendVerificationEmail() {
+    try {
+      FirebaseAuth.instance.currentUser?.sendEmailVerification();
+    } catch (e) {
+      debugPrint('Error sending email verification: $e');
+    }
+  }
+
+  Future<void> _checkEmailVerified() async {
     await FirebaseAuth.instance.currentUser?.reload();
+    final user = FirebaseAuth.instance.currentUser;
 
-    setState(() {
-      isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
-    });
+    if (!mounted) return;
 
-    if (isEmailVerified) {
-      context.go(AppRoutes.home); // Redirect to HomeView
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Email Successfully Verified")));
-
+    if (user != null && user.emailVerified) {
+      setState(() => isEmailVerified = true);
       timer?.cancel();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Email successfully verified")),
+      );
+      context.go(AppRoutes.home);
     }
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     timer?.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: SingleChildScrollView(
+    final email = FirebaseAuth.instance.currentUser?.email ?? '';
+
+    return Scaffold(
+      backgroundColor: const Color(0xff1d2630),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SizedBox(height: 35),
-              const SizedBox(height: 30),
-              const Center(
-                child: Text('Check your \n Email', textAlign: TextAlign.center),
-              ),
-              const SizedBox(height: 8),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 32.0),
-                child: Center(
-                  child: Text(
-                    'We have sent you a Email on ${FirebaseAuth.instance.currentUser?.email}. Please verify your email address to continue.',
-                    textAlign: TextAlign.center,
-                  ),
-                ),
+              const Spacer(),
+              const Text(
+                'Check your\nEmail',
+                style: TextStyle(color: Colors.white, fontSize: 24),
+                textAlign: TextAlign.center,
               ),
               const SizedBox(height: 16),
-              const Center(child: CircularProgressIndicator()),
-              const SizedBox(height: 8),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 32.0),
-                child: Center(
-                  child: Text(
-                    'Verifying email....',
-                    textAlign: TextAlign.center,
-                  ),
-                ),
+              Text(
+                'We have sent a verification link to $email. Please check your inbox and verify your email to continue.',
+                style: const TextStyle(color: Colors.white70),
+                textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 57),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 32.0),
-                child: ElevatedButton(
-                  child: const Text('Resend'),
-                  onPressed: () {
-                    try {
-                      FirebaseAuth.instance.currentUser
-                          ?.sendEmailVerification();
-                    } catch (e) {
-                      debugPrint('$e');
-                    }
-                  },
-                ),
+              const SizedBox(height: 32),
+              const CircularProgressIndicator(),
+              const SizedBox(height: 12),
+              const Text(
+                'Verifying email...',
+                style: TextStyle(color: Colors.white60),
+              ),
+              const Spacer(),
+              ElevatedButton(
+                onPressed: () async {
+                  try {
+                    await FirebaseAuth.instance.currentUser
+                        ?.sendEmailVerification();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Verification email resent.'),
+                      ),
+                    );
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Failed to resend email: $e')),
+                    );
+                  }
+                },
+                child: const Text('Resend Email'),
               ),
             ],
           ),
