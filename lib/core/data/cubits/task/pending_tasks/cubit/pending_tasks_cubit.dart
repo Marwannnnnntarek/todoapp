@@ -1,33 +1,26 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'dart:async';
+
+import 'package:bloc/bloc.dart';
 import 'package:todoapp/core/data/cubits/task/pending_tasks/cubit/pending_tasks_state.dart';
-import 'package:todoapp/core/data/models/todo_model.dart';
+import 'package:todoapp/core/data/services/database_service.dart';
 
-class PendingTasksCubit extends Cubit<PendingTasksState> {
-  PendingTasksCubit() : super(PendingTasksInitial());
+class PendingTasksCubit extends Cubit<PendingTaskState> {
+  final DatabaseService db;
+  StreamSubscription? _subscription;
 
-  final _uid = FirebaseAuth.instance.currentUser!.uid;
-  final _collection = FirebaseFirestore.instance.collection('todos');
+  PendingTasksCubit(this.db) : super(PendingTaskInitial());
 
-  Future<void> fetchPendingTasks() async {
-    emit(PendingTasksLoading());
-    try {
-      final snapshot =
-          await _collection
-              .where('uid', isEqualTo: _uid)
-              .where('completed', isEqualTo: false)
-              .orderBy('timestamp', descending: true)
-              .get();
+  void listenToPendingTodos() {
+    emit(PendingTaskLoading());
+    _subscription = db.pendingtodos.listen(
+      (todos) => emit(PendingTaskLoaded(todos)),
+      onError: (error) => emit(PendingTaskError(error.toString())),
+    );
+  }
 
-      final tasks =
-          snapshot.docs.map((doc) {
-            return TodoModel.fromJson(doc.data(), doc.id);
-          }).toList();
-
-      emit(PendingTasksLoaded(tasks));
-    } catch (e) {
-      emit(PendingTasksError('Error loading pending tasks: $e'));
-    }
+  @override
+  Future<void> close() {
+    _subscription?.cancel();
+    return super.close();
   }
 }

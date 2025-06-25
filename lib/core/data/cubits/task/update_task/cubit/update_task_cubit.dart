@@ -1,22 +1,18 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todoapp/core/data/cubits/task/update_task/cubit/update_task_state.dart';
+import 'package:bloc/bloc.dart';
+import 'package:todoapp/core/data/cubits/task/add_task/add_task_state.dart';
+import 'package:todoapp/core/data/services/database_service.dart';
 
-class UpdateTaskCubit extends Cubit<UpdateTaskState> {
-  UpdateTaskCubit() : super(UpdateTaskInitial());
-
-  final _collection = FirebaseFirestore.instance.collection('todos');
+class UpdateTaskCubit extends Cubit<AddTaskState> {
+  final DatabaseService db;
+  UpdateTaskCubit(this.db) : super(AddTaskInitial());
 
   Future<void> updateTask(String id, String title, String description) async {
-    emit(UpdateTaskLoading());
+    emit(AddTaskLoading());
     try {
-      await _collection.doc(id).update({
-        'title': title,
-        'description': description,
-      });
-      emit(UpdateTaskSuccess());
+      await db.updateTask(id, title, description);
+      emit(AddTaskSuccess());
     } catch (e) {
-      emit(UpdateTaskError('Failed to update task: $e'));
+      emit(AddTaskError(e.toString()));
     }
   }
 }

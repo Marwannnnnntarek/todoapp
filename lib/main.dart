@@ -6,6 +6,8 @@ import 'package:todoapp/core/data/cubits/task/completed_tasks/cubit/completed_ta
 import 'package:todoapp/core/data/cubits/task/delete_task/cubit/delete_task_cubit.dart';
 import 'package:todoapp/core/data/cubits/task/pending_tasks/cubit/pending_tasks_cubit.dart';
 import 'package:todoapp/core/data/cubits/task/update_task/cubit/update_task_cubit.dart';
+import 'package:todoapp/core/data/cubits/task/update_task_status/cubit/update_task_status_cubit.dart';
+import 'package:todoapp/core/data/services/database_service.dart';
 import 'package:todoapp/core/helpers/app_routes.dart';
 import 'package:todoapp/core/data/cubits/auth/signin/signin_cubit.dart';
 import 'package:todoapp/core/data/cubits/auth/signout/signout_cubit.dart';
@@ -29,14 +31,23 @@ class MyApp extends StatelessWidget {
         BlocProvider<SigninCubit>(create: (context) => SigninCubit()),
         BlocProvider<SignupCubit>(create: (context) => SignupCubit()),
         BlocProvider<SignoutCubit>(create: (context) => SignoutCubit()),
-        BlocProvider<AddTaskCubit>(create: (context) => AddTaskCubit()),
-        BlocProvider<DeleteTaskCubit>(create: (context) => DeleteTaskCubit()),
-        BlocProvider<UpdateTaskCubit>(create: (context) => UpdateTaskCubit()),
+        BlocProvider<AddTaskCubit>(
+          create: (context) => AddTaskCubit(DatabaseService()),
+        ),
+        BlocProvider<DeleteTaskCubit>(
+          create: (context) => DeleteTaskCubit(DatabaseService()),
+        ),
+        BlocProvider<UpdateTaskCubit>(
+          create: (context) => UpdateTaskCubit(DatabaseService()),
+        ),
+        BlocProvider<UpdateTaskStatusCubit>(
+          create: (context) => UpdateTaskStatusCubit(DatabaseService()),
+        ),
         BlocProvider<CompletedTasksCubit>(
-          create: (context) => CompletedTasksCubit(),
+          create: (context) => CompletedTasksCubit(DatabaseService()),
         ),
         BlocProvider<PendingTasksCubit>(
-          create: (context) => PendingTasksCubit(),
+          create: (context) => PendingTasksCubit(DatabaseService()),
         ),
       ],
       child: MaterialApp.router(

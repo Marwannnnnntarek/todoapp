@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:todoapp/core/data/cubits/task/add_task/add_task_cubit.dart';
 import 'package:todoapp/core/data/cubits/task/add_task/add_task_state.dart';
 import 'package:todoapp/core/data/cubits/task/update_task/cubit/update_task_cubit.dart';
-import 'package:todoapp/core/data/cubits/task/update_task/cubit/update_task_state.dart';
 import 'package:todoapp/core/data/models/todo_model.dart';
 
 class ShowTaskDialog extends StatefulWidget {
@@ -53,11 +52,11 @@ class _ShowTaskDialogState extends State<ShowTaskDialog> {
             }
           },
         ),
-        BlocListener<UpdateTaskCubit, UpdateTaskState>(
+        BlocListener<UpdateTaskCubit, AddTaskState>(
           listener: (context, state) {
-            if (state is UpdateTaskSuccess && isEdit) {
+            if (state is AddTaskSuccess && isEdit) {
               context.pop(); // Close on successful update
-            } else if (state is UpdateTaskError) {
+            } else if (state is AddTaskError) {
               ScaffoldMessenger.of(
                 context,
               ).showSnackBar(SnackBar(content: Text(state.message)));

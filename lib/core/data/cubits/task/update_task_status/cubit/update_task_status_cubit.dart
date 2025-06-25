@@ -1,23 +1,18 @@
 import 'package:bloc/bloc.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:equatable/equatable.dart';
+import 'package:todoapp/core/data/cubits/task/add_task/add_task_state.dart';
+import 'package:todoapp/core/data/services/database_service.dart';
 
-part 'update_task_status_state.dart';
+class UpdateTaskStatusCubit extends Cubit<AddTaskState> {
+  final DatabaseService db;
+  UpdateTaskStatusCubit(this.db) : super(AddTaskInitial());
 
-class UpdateTaskStatusCubit extends Cubit<UpdateTaskStatusState> {
-  UpdateTaskStatusCubit() : super(UpdateTaskStatusInitial());
-
-  Future<void> updateTaskStatus(String id, bool completed) async {
-    emit(UpdateTaskStatusLoading());
-
+  Future<void> updateStatus(String id, bool completed) async {
+    emit(AddTaskLoading());
     try {
-      await FirebaseFirestore.instance.collection('todos').doc(id).update({
-        'completed': completed,
-      });
-
-      emit(UpdateTaskStatusSuccess());
+      await db.updateTaskStatus(id, completed);
+      emit(AddTaskSuccess());
     } catch (e) {
-      emit(UpdateTaskStatusError(e.toString()));
+      emit(AddTaskError(e.toString()));
     }
   }
 }

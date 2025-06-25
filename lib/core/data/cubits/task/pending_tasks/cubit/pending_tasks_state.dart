@@ -1,17 +1,17 @@
 import 'package:todoapp/core/data/models/todo_model.dart';
 
-abstract class PendingTasksState {}
+abstract class PendingTaskState {}
 
-class PendingTasksInitial extends PendingTasksState {}
+class PendingTaskInitial extends PendingTaskState {}
 
-class PendingTasksLoading extends PendingTasksState {}
+class PendingTaskLoading extends PendingTaskState {}
 
-class PendingTasksLoaded extends PendingTasksState {
-  final List<TodoModel> tasks;
-  PendingTasksLoaded(this.tasks);
+class PendingTaskLoaded extends PendingTaskState {
+  final List<TodoModel> todos;
+  PendingTaskLoaded(this.todos);
 }
 
-class PendingTasksError extends PendingTasksState {
+class PendingTaskError extends PendingTaskState {
   final String message;
-  PendingTasksError(this.message);
+  PendingTaskError(this.message);
 }

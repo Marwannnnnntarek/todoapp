@@ -1,33 +1,26 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todoapp/core/data/cubits/task/completed_tasks/cubit/completed_tasks_state.dart';
-import 'package:todoapp/core/data/models/todo_model.dart';
+import 'dart:async';
 
-class CompletedTasksCubit extends Cubit<CompletedTasksState> {
-  CompletedTasksCubit() : super(CompletedTasksInitial());
+import 'package:bloc/bloc.dart';
+import 'package:todoapp/core/data/cubits/task/pending_tasks/cubit/pending_tasks_state.dart';
+import 'package:todoapp/core/data/services/database_service.dart';
 
-  final _uid = FirebaseAuth.instance.currentUser!.uid;
-  final _collection = FirebaseFirestore.instance.collection('todos');
+class CompletedTasksCubit extends Cubit<PendingTaskState> {
+  final DatabaseService db;
+  StreamSubscription? _subscription;
 
-  Future<void> fetchCompletedTasks() async {
-    emit(CompletedTasksLoading());
-    try {
-      final snapshot =
-          await _collection
-              .where('uid', isEqualTo: _uid)
-              .where('completed', isEqualTo: true)
-              .orderBy('timestamp', descending: true)
-              .get();
+  CompletedTasksCubit(this.db) : super(PendingTaskInitial());
 
-      final tasks =
-          snapshot.docs.map((doc) {
-            return TodoModel.fromJson(doc.data(), doc.id);
-          }).toList();
+  void listenToCompletedTodos() {
+    emit(PendingTaskLoading());
+    _subscription = db.completedtodos.listen(
+      (todos) => emit(PendingTaskLoaded(todos)),
+      onError: (error) => emit(PendingTaskError(error.toString())),
+    );
+  }
 
-      emit(CompletedTasksLoaded(tasks));
-    } catch (e) {
-      emit(CompletedTasksError('Error loading completed tasks: $e'));
-    }
+  @override
+  Future<void> close() {
+    _subscription?.cancel();
+    return super.close();
   }
 }

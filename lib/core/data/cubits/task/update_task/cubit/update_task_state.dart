@@ -1,12 +1,12 @@
-abstract class UpdateTaskState {}
+// abstract class UpdateTaskState {}
 
-class UpdateTaskInitial extends UpdateTaskState {}
+// class UpdateTaskInitial extends UpdateTaskState {}
 
-class UpdateTaskLoading extends UpdateTaskState {}
+// class UpdateTaskLoading extends UpdateTaskState {}
 
-class UpdateTaskSuccess extends UpdateTaskState {}
+// class UpdateTaskSuccess extends UpdateTaskState {}
 
-class UpdateTaskError extends UpdateTaskState {
-  final String message;
-  UpdateTaskError(this.message);
-}
+// class UpdateTaskError extends UpdateTaskState {
+//   final String message;
+//   UpdateTaskError(this.message);
+// }

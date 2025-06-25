@@ -1,5 +1,4 @@
-// add_task_state.dart
-abstract class AddTaskState {}
+class AddTaskState {}
 
 class AddTaskInitial extends AddTaskState {}
 

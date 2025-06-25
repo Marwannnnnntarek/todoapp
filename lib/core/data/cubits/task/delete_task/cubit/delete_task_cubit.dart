@@ -1,20 +1,18 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:todoapp/core/data/cubits/task/delete_task/cubit/delete_task_state.dart';
+import 'package:bloc/bloc.dart';
+import 'package:todoapp/core/data/cubits/task/add_task/add_task_state.dart';
+import 'package:todoapp/core/data/services/database_service.dart';
 
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-class DeleteTaskCubit extends Cubit<DeleteTaskState> {
-  DeleteTaskCubit() : super(DeleteTaskInitial());
-
-  final _collection = FirebaseFirestore.instance.collection('todos');
+class DeleteTaskCubit extends Cubit<AddTaskState> {
+  final DatabaseService db;
+  DeleteTaskCubit(this.db) : super(AddTaskInitial());
 
   Future<void> deleteTask(String id) async {
-    emit(DeleteTaskLoading());
+    emit(AddTaskLoading());
     try {
-      await _collection.doc(id).delete();
-      emit(DeleteTaskSuccess());
+      await db.deleteTask(id);
+      emit(AddTaskSuccess());
     } catch (e) {
-      emit(DeleteTaskError('Failed to delete task: $e'));
+      emit(AddTaskError(e.toString()));
     }
   }
 }
