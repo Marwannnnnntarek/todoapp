@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:go_router/go_router.dart';
 import 'package:todoapp/core/data/models/todo_model.dart';
 import 'package:todoapp/core/data/cubits/task/delete_task/cubit/delete_task_cubit.dart';
 import 'package:todoapp/core/helpers/todo_model_extension.dart';
@@ -29,7 +30,29 @@ class CompletedTaskTile extends StatelessWidget {
               icon: Icons.delete,
               label: 'Delete',
               onPressed: (context) {
-                context.read<DeleteTaskCubit>().deleteTask(todo.id);
+                showDialog<bool>(
+                  context: context,
+                  builder:
+                      (context) => AlertDialog(
+                        title: const Text('Confirm Delete'),
+                        content: const Text('Are you sure you want to delete?'),
+                        actions: [
+                          TextButton(
+                            onPressed: () => context.pop(false),
+                            child: const Text('Cancel'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              context.read<DeleteTaskCubit>().deleteTask(
+                                todo.id,
+                              );
+                              context.pop(true);
+                            },
+                            child: const Text('Delete'),
+                          ),
+                        ],
+                      ),
+                );
               },
             ),
           ],

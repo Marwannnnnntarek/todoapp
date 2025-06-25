@@ -33,13 +33,13 @@ class SignOutButton extends StatelessWidget {
                   content: const Text('Are you sure you want to sign out?'),
                   actions: [
                     TextButton(
-                      onPressed: () => Navigator.of(context).pop(false),
+                      onPressed: () => context.pop(false),
                       child: const Text('Cancel'),
                     ),
                     TextButton(
                       onPressed: () {
                         context.read<SignoutCubit>().signout();
-                        Navigator.of(context).pop(true);
+                        context.pop(true);
                       },
                       child: const Text('Sign Out'),
                     ),
