@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:go_router/go_router.dart';
 import 'package:todoapp/features/signin/views/signin_view.dart';
 import 'package:todoapp/features/signup/views/signup_view.dart';
+import 'package:todoapp/features/splash/views/splash_view.dart';
 import 'package:todoapp/features/verify/views/verify_view.dart';
 import 'package:todoapp/features/home/views/home_view.dart';
 
@@ -10,9 +11,11 @@ class AppRoutes {
   static const String signup = '/SignupView';
   static const String signin = '/SigninView';
   static const String home = '/HomeView';
+  static const String splash = '/SplashView';
 
   static final GoRouter router = GoRouter(
-    initialLocation: '/',
+    initialLocation: splash,
+
     // 🔁 Redirect logic based on auth state
     redirect: (context, state) {
       final isLoggedIn = FirebaseAuth.instance.currentUser != null;
@@ -31,15 +34,14 @@ class AppRoutes {
 
       return null; // No redirect needed
     },
-
     routes: [
       // Optional root route that redirects based on auth state
-      GoRoute(
-        path: '/',
-        redirect:
-            (context, state) =>
-                FirebaseAuth.instance.currentUser != null ? home : signin,
-      ),
+      // GoRoute(
+      //   path: '/',
+      //   redirect:
+      //       (context, state) =>
+      //           FirebaseAuth.instance.currentUser != null ? home : signin,
+      // ),
       GoRoute(
         path: verify,
         builder: (context, state) => EmailVerificationView(),
@@ -47,6 +49,7 @@ class AppRoutes {
       GoRoute(path: signup, builder: (context, state) => SignupView()),
       GoRoute(path: signin, builder: (context, state) => SigninView()),
       GoRoute(path: home, builder: (context, state) => HomeView()),
+      GoRoute(path: splash, builder: (context, state) => SplashView()),
     ],
   );
 }
