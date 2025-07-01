@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todoapp/core/data/cubits/tab_switch/cubit/tab_switch_cubit.dart';
+import 'package:todoapp/features/home/data/cubit/tab_switch_cubit.dart';
 import 'package:todoapp/features/home/views/completed_view.dart';
 import 'package:todoapp/features/home/views/pending_view.dart';
-import 'package:todoapp/features/home/views/widgets/home_app_bar.dart';
-import 'package:todoapp/features/home/views/widgets/tab_switcher.dart';
-import 'package:todoapp/features/home/views/widgets/task_tabs_view.dart';
-import 'package:todoapp/features/home/views/widgets/add_task_button.dart';
+import 'package:todoapp/features/home/views/widgets/home_widgets/home_app_bar.dart';
+import 'package:todoapp/features/home/views/widgets/home_widgets/tab_switcher.dart';
+import 'package:todoapp/features/home/views/widgets/home_widgets/task_tabs_view.dart';
+import 'package:todoapp/features/home/views/widgets/home_widgets/add_task_button.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});

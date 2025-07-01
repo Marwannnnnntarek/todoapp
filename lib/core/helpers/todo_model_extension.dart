@@ -1,4 +1,4 @@
-import 'package:todoapp/core/data/models/todo_model.dart';
+import 'package:todoapp/features/home/data/models/todo_model.dart';
 
 extension TodoModelExtension on TodoModel {
   String get formattedDate {

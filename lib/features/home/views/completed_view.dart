@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todoapp/core/data/cubits/task/completed_tasks/cubit/completed_tasks_cubit.dart';
-import 'package:todoapp/core/data/cubits/task/pending_tasks/cubit/pending_tasks_state.dart';
-import 'package:todoapp/features/home/views/widgets/completed_task_tile.dart';
+import 'package:todoapp/features/home/data/cubit/task_stream_cubit.dart';
+import 'package:todoapp/features/home/data/cubit/task_stream_state.dart';
+import 'package:todoapp/features/home/views/widgets/completed_widgets/completed_task_tile.dart';
 
 class CompletedView extends StatefulWidget {
   const CompletedView({super.key});
@@ -15,16 +15,16 @@ class _CompletedViewState extends State<CompletedView> {
   @override
   void initState() {
     super.initState();
-    context.read<CompletedTasksCubit>().listenToCompletedTodos();
+    context.read<TaskStreamCubit>().listenToCompletedTodos();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CompletedTasksCubit, PendingTaskState>(
+    return BlocBuilder<TaskStreamCubit, TaskStreamState>(
       builder: (context, state) {
-        if (state is PendingTaskLoading) {
+        if (state is TodoStreamLoading) {
           return const Center(child: CircularProgressIndicator());
-        } else if (state is PendingTaskLoaded) {
+        } else if (state is TodoStreamLoaded) {
           final todos = state.todos;
           if (todos.isEmpty) {
             return const Center(
@@ -40,7 +40,7 @@ class _CompletedViewState extends State<CompletedView> {
               return CompletedTaskTile(todo: todos[index]);
             },
           );
-        } else if (state is PendingTaskError) {
+        } else if (state is TodoStreamError) {
           return Center(
             child: Text(
               'Error: ${state.message}',

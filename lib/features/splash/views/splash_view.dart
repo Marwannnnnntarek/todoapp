@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:go_router/go_router.dart';
 import 'package:todoapp/core/helpers/app_routes.dart';
+import 'package:todoapp/features/splash/views/widgets/splash_body.dart';
+import 'package:todoapp/features/splash/views/widgets/splash_message.dart';
 
 class SplashView extends StatefulWidget {
   const SplashView({super.key});
@@ -13,31 +15,26 @@ class SplashView extends StatefulWidget {
 
 class _SplashViewState extends State<SplashView>
     with SingleTickerProviderStateMixin {
-  late AnimationController _animationController;
-  late Animation<double> _fadeAnimation;
+  late final AnimationController _animationController;
 
   @override
   void initState() {
     super.initState();
+    _setupAnimation();
+    _navigateAfterDelay();
+  }
 
+  void _setupAnimation() {
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 2),
     );
 
-    _fadeAnimation = Tween<double>(
-      begin: 0,
-      end: 1,
-    ).animate(_animationController);
-
     _animationController.forward();
-
-    _navigateAfterDelay();
   }
 
   Future<void> _navigateAfterDelay() async {
     await Future.delayed(const Duration(seconds: 3));
-
     final user = FirebaseAuth.instance.currentUser;
 
     if (user == null) {
@@ -57,23 +54,6 @@ class _SplashViewState extends State<SplashView>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xff1d2630),
-      body: FadeTransition(
-        opacity: _fadeAnimation,
-        child: Center(
-          child: Text(
-            'Welcome to ToDo',
-            style: const TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-              letterSpacing: 1.5,
-              fontFamily: 'Georgia',
-            ),
-          ),
-        ),
-      ),
-    );
+    return const SplashBody(child: SplashMessage());
   }
 }
