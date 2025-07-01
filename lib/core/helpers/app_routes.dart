@@ -2,7 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:todoapp/features/auth/views/signin_view.dart';
 import 'package:todoapp/features/auth/views/signup_view.dart';
 import 'package:todoapp/features/splash/views/splash_view.dart';
-import 'package:todoapp/features/auth/views/verify_view.dart';
+import 'package:todoapp/features/auth/views/email_verification_view.dart';
 import 'package:todoapp/features/home/views/home_view.dart';
 
 class AppRoutes {
