@@ -1,16 +1,6 @@
 # todoapp
 
-A new Flutter project.
+Do Todo – Flutter To‑Do List App
+A sleek, cross‑platform Flutter app to help users manage daily tasks. Features include Firebase authentication (sign-in, sign-up, email verification), real-time task creation, editing, deletion, and state management with BLoC/Cubit. Responsive UI with animated splash screen, built-in routing via go_router, and persistent user data via Firebase. Optimized for smooth UX and maintainable architecture.
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
