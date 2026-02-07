@@ -39,14 +39,14 @@ class _SignupFormState extends State<SignupForm> {
     return BlocConsumer<AuthCubit, AuthState>(
       listener: (context, state) {
         if (state is AuthSuccess) {
-          context.go(
-            AppRoutes.verify,
-          ); // Or AppRoutes.home if you change logic later
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (!context.mounted) return;
+            context.go(AppRoutes.verify);
+            context.read<AuthCubit>().reset();
+          });
         } else if (state is AuthError) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Registration failed. Please try again.'),
-            ),
+            SnackBar(content: Text(state.message)),
           );
         }
       },

@@ -6,11 +6,13 @@ class DatabaseService {
   final CollectionReference todoCollection = FirebaseFirestore.instance
       .collection('todos');
 
+  static String get _uid =>
+      FirebaseAuth.instance.currentUser?.uid ?? 'guest';
+
   // Add task
   Future<DocumentReference> addTask(String title, String description) async {
-    final user = FirebaseAuth.instance.currentUser!;
     return await todoCollection.add({
-      'uid': user.uid,
+      'uid': _uid,
       'title': title,
       'description': description,
       'completed': false,
@@ -38,9 +40,8 @@ class DatabaseService {
 
   // Get pending tasks stream
   Stream<List<TodoModel>> get pendingtodos {
-    final user = FirebaseAuth.instance.currentUser!;
     return todoCollection
-        .where('uid', isEqualTo: user.uid)
+        .where('uid', isEqualTo: _uid)
         .where('completed', isEqualTo: false)
         .orderBy('timestamp', descending: true)
         .snapshots()
@@ -49,9 +50,8 @@ class DatabaseService {
 
   // Get completed tasks stream
   Stream<List<TodoModel>> get completedtodos {
-    final user = FirebaseAuth.instance.currentUser!;
     return todoCollection
-        .where('uid', isEqualTo: user.uid)
+        .where('uid', isEqualTo: _uid)
         .where('completed', isEqualTo: true)
         .orderBy('timestamp', descending: true)
         .snapshots()

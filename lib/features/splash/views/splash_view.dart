@@ -39,10 +39,10 @@ class _SplashViewState extends State<SplashView>
 
     if (user == null) {
       context.go(AppRoutes.signin);
-    } else if (!user.emailVerified) {
-      context.go(AppRoutes.verify);
-    } else {
+    } else if (user.isAnonymous || user.emailVerified) {
       context.go(AppRoutes.home);
+    } else {
+      context.go(AppRoutes.verify);
     }
   }
 
